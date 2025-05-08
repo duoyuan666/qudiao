@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文案去除星号工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-size: 16px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            flex-grow: 1;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .clear {
+            background-color: #f44336;
+        }
+        .clear:hover {
+            background-color: #d32f2f;
+        }
+        .copy {
+            background-color: #2196F3;
+        }
+        .copy:hover {
+            background-color: #0b7dda;
+        }
+        .stats {
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>文案去除星号工具</h1>
+        
+        <textarea id="inputText" placeholder="请在此处输入包含星号(*)的文案..."></textarea>
+        
+        <div class="button-container">
+            <button onclick="removeAsterisks()">去除星号</button>
+            <button class="copy" onclick="copyToClipboard()">复制结果</button>
+            <button class="clear" onclick="clearText()">清空</button>
+        </div>
+        
+        <textarea id="outputText" placeholder="结果将显示在这里..." readonly></textarea>
+        
+        <div class="stats">
+            <div id="originalStats">原文: 0 个字符 (包含 0 个星号)</div>
+            <div id="resultStats">结果: 0 个字符</div>
+        </div>
+    </div>
+
+    <script>
+        function removeAsterisks() {
+            const inputText = document.getElementById('inputText').value;
+            const outputText = document.getElementById('outputText');
+            
+            // 计算原始星号数量
+            const asteriskCount = (inputText.match(/\*/g) || []).length;
+            
+            // 去除所有星号
+            const result = inputText.replace(/\*/g, '');
+            
+            // 更新输出和统计信息
+            outputText.value = result;
+            updateStats(inputText, result, asteriskCount);
+        }
+        
+        function copyToClipboard() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            document.execCommand('copy');
+            
+            // 复制成功提示
+            alert('已复制到剪贴板！');
+        }
+        
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            updateStats('', '', 0);
+        }
+        
+        function updateStats(inputText, resultText, asteriskCount) {
+            document.getElementById('originalStats').textContent = 
+                `原文: ${inputText.length} 个字符 (包含 ${asteriskCount} 个星号)`;
+            document.getElementById('resultStats').textContent = 
+                `结果: ${resultText.length} 个字符`;
+        }
+        
+        // 添加输入文本框监听，实现实时处理
+        document.getElementById('inputText').addEventListener('input', function() {
+            removeAsterisks();
+        });
+    </script>
+</body>
+</html>
